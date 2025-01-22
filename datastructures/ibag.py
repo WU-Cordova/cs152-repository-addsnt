@@ -8,8 +8,10 @@ class IBag(ABC, Generic[T]):
     Interface for a Bag (MultiSet) data structure.
     """
 
-    @abstractmethod
+    @abstractmethod # annotation/decorator in python
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
+        # the star(*): allows for the passing of multiple parameters
+        # Optional: something may or may not be passed in
         """
         Initializes the Bag.
         """
