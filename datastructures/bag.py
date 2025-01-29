@@ -12,7 +12,7 @@ class Bag(IBag[T]):
     def add(self, item: T) -> None:
         if item is None:
             raise TypeError("You cannot add nothing to the bag")
-        self.items.append(items)
+        self.items.append(item)
 
     def remove(self, item: T) -> None:
         if item not in self.items:
@@ -30,10 +30,10 @@ class Bag(IBag[T]):
         return distinct_items
 
     def __contains__(self, item) -> bool:
-        if item in items:
+        if item in self.items:
             return True
         else:
             return False
 
     def clear(self) -> None:
-        self.items.clear()
+        return self.items.clear()
