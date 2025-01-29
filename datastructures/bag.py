@@ -3,19 +3,19 @@ from datastructures.ibag import IBag, T
 
 
 class Bag(IBag[T]):
-    def __init__(self, bag, *items: Optional[Iterable[T]]) -> None:
+    def __init__(self, *items: Optional[Iterable[T]]) -> None:
         self.items = []
         if items:
             for item in items:
-                self.items.append(item)
+                self.add(item)
 
     def add(self, item: T) -> None:
         if item is None:
             raise TypeError("You cannot add nothing to the bag")
-        self.item.append(item)
+        self.items.append(items)
 
     def remove(self, item: T) -> None:
-        if item not in slef.items:
+        if item not in self.items:
             raise ValueError("That item is not in the bag")
         self.items.remove(item)
 
