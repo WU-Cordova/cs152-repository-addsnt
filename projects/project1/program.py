@@ -1,9 +1,12 @@
+import copy
+import random
 from datastructures.bag import Bag
-from projects.project1.card import Card, CardSuit, CardFace
+from projects.project1.card import Card, Suit, Face, MultiDeck
+from projects.project1.game import Game
 
 def main():
-    
-    print("Hello, World!")
+    game = Game()
+    game.play()
 
 
 
