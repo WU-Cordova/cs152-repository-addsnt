@@ -11,7 +11,7 @@ import os
 from typing import Any, Iterator, overload
 import numpy as np
 from numpy.typing import NDArray
-
+import copy
 
 from datastructures.iarray import IArray, T
 
@@ -19,14 +19,37 @@ from datastructures.iarray import IArray, T
 class Array(IArray[T]):  
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
-        raise NotImplementedError('Constructor not implemented.')
+        self.__data_type = data_type
+        self.__capacity = max(self.__element_count, 10)
+        self.__logical_size = len(starting_sequence)
+
+        if not isinstance(starting_sequence, Sequence):
+	        raise ValueError("This should raise only raise if a strating_sequence is not a sequence type.")
+
+        if not isinstance(data_type, type):
+            raise ValueError("This should raise because data_type is not a type, it's a data value!")
+
+        self.__elements: NDArray = np.empty(self.__capacity, dtype = data_type)
+
+        for index in range(self.__logical_size):
+            self.__elements[index] = copy.deepcopy(starting_sequence[index])
+
 
     @overload
     def __getitem__(self, index: int) -> T: ...
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        raise NotImplementedError('Indexing not implemented.')
+        
+        if isinstance(index, slice):
+            start, stop = index.start, index.stop
+
+            if start >= self.__logical_size or stop > self.__logical_size:
+                raise IndexError("Out of bounds")
+
+            items_to_return = self.__elements[index].tolist()
+            return Array(starting_sequence=items_to_return, data_type=self.__data_type)
+            
     
     def __setitem__(self, index: int, item: T) -> None:
         raise NotImplementedError('Indexing not implemented.')
