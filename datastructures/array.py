@@ -44,8 +44,8 @@ class Array(IArray[T]):
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
 
-        if not isinstance(int, slice):
-            raise TypeError("Index must be an interger or a slice")
+        if not isinstance(index, (int, slice)):
+            raise TypeError("Index must be an integer or slice")
         
         if isinstance(index, slice):
             start, stop = index.start, index.stop
