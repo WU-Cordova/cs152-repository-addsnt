@@ -131,7 +131,6 @@ class Array(IArray[T]):
             return False
 
         return True
-
         
     def __iter__(self) -> Iterator[T]:
         # allows for iteration through elements
