@@ -66,6 +66,8 @@ class Array(IArray[T]):
         else:
             raise TypeError(f"Item must be of type {self.__data_type.__name__}")
 
+        # add an out of bounds thing?
+
     def append(self, data: T) -> None:
         if self.__capacity == self.__logical_size:
             self.__capacity = self.__capacity*2
