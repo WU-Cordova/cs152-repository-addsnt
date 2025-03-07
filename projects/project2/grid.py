@@ -1,5 +1,5 @@
 from typing import List
-from random import choice
+import random
 from datastructures.array2d import Array2D
 from projects.project2.cell import Cell
 
