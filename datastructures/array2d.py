@@ -117,16 +117,17 @@ class Array2D(IArray2D[T]):
     def __repr__(self) -> str: 
         return f'Array2D {self.row_len} Rows x {self.column_len} Columns, items: {str(self)}'
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: Array2D) -> bool:
+        # this jawn does NAWT work
         if not isinstance(other, Array2D):
             return False
-        if self.row_len != other.row_len:
+        if (self.row_len, self.column_len) != (other.row_len, other.column_len):
             return False
-        if self.column_len != other.column_len:
-            return False
-        for row_index in range(self.row_len):
-            for column_index in range(self.column_len):
-                if self[row_index][column_index] != other[row_index][column_index]:
+
+        for row in range(self.row_len):
+            for col in range(self.column_len):
+                if self.array2d[row][col] != other.array2d[row][col]:
+                    print(f"Mismatch at ({row}, {col}): {self.array2d[row][col].is_alive} vs {other.array2d[row][col].is_alive}")
                     return False
         return True
 
