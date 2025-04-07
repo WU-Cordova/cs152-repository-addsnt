@@ -31,7 +31,12 @@ class CircularQueue(IQueue[T]):
                 maxsize: The maximum size of the queue
                 data_type: The type of the elements in the queue
         '''
-        raise NotImplementedError
+        self.max_size = maxsize
+        self.data_type = data_type
+        self.circq = Array(starting_sequence=[0] * maxsize, data_type=data_type)
+        self._front = 0
+        self._rear = 0
+        self._size = 0
 
     def enqueue(self, item: T) -> None:
         ''' Adds an item to the rear of the queue
@@ -58,7 +63,12 @@ class CircularQueue(IQueue[T]):
             Raises:
                 IndexError: If the queue is full
         '''
-        raise NotImplementedError
+        if self.full:
+            raise IndexError('Queue is full')
+        self.circq[self._rear] = item
+        self._rear = (self._rear + 1) % self.max_size
+        self._size += 1
+
 
     def dequeue(self) -> T:
         ''' Removes and returns the item at the front of the queue
@@ -85,7 +95,14 @@ class CircularQueue(IQueue[T]):
             Raises:
                 IndexError: If the queue is empty
         '''
-        raise NotImplementedError
+        if self.empty:
+            raise IndexError('Queue is empty')
+        item = self.circq[self._front]
+        self.circq[self._front] = 0
+        self._front = (self._front + 1) % self.max_size
+        self._size -= 1
+        return item
+
 
     def clear(self) -> None:
         ''' Removes all items from the queue 
@@ -103,7 +120,11 @@ class CircularQueue(IQueue[T]):
                 >>> q.rear
                 IndexError('Queue is empty')
         '''
-        raise NotImplementedError
+        self._front = 0
+        self._rear = 0
+        self._size = 0
+        self.circq = Array(starting_sequence=[None] * self.max_size, data_type=self.data_type)
+
 
     @property
     def front(self) -> T:
@@ -135,7 +156,10 @@ class CircularQueue(IQueue[T]):
             Raises:
                 IndexError: If the queue is empty
         '''
-        raise NotImplementedError
+        if self.empty:
+            raise IndexError('Queue is empty')
+        return self.circq[self._front]
+
 
     @property
     def full(self) -> bool:
@@ -184,7 +208,7 @@ class CircularQueue(IQueue[T]):
             Returns:
                 True if the queue is full, False otherwise
         '''
-        raise NotImplementedError
+        return self._size == self.max_size
 
     @property
     def empty(self) -> bool:
@@ -232,7 +256,8 @@ class CircularQueue(IQueue[T]):
             Returns:
                 True if the queue is empty, False otherwise
         '''
-        raise NotImplementedError
+        return self._size == 0
+
     
     @property
     def maxsize(self) -> int:
@@ -246,7 +271,7 @@ class CircularQueue(IQueue[T]):
             Returns:
                 The maximum size of the queue
         '''
-        raise NotImplementedError
+        return self.max_size
 
     def __eq__(self, other: object) -> bool:
         ''' Returns True if this CircularQueue is equal to another object, False otherwise
@@ -279,7 +304,21 @@ class CircularQueue(IQueue[T]):
             Returns:
                 True if this CircularQueue is equal to another object, False otherwise
         '''
-        raise NotImplementedError   
+        if not isinstance(other, CircularQueue):
+            return False
+        if self.data_type != other.data_type or len(self) != len(other):
+            return False
+
+        temp_self_front = self._front
+        temp_other_front = other._front
+
+        for _ in range(len(self)):
+            if self.circq[temp_self_front] != other.circq[temp_other_front]:
+                return False
+            temp_self_front = (temp_self_front + 1) % self.max_size
+            temp_other_front = (temp_other_front + 1) % other.max_size
+        return True
+   
     
     def __len__(self) -> int:
         ''' Returns the number of items in the queue
@@ -313,7 +352,8 @@ class CircularQueue(IQueue[T]):
             Returns:
                 The number of items in the queue
         '''
-        raise NotImplementedError
+        return self._size
+
 
     def __str__(self) -> str:
         ''' Returns a string representation of the CircularQueue
@@ -329,7 +369,7 @@ class CircularQueue(IQueue[T]):
             Returns:
                 A string representation of the queue
         '''
-        return str(self.circularqueue)
+        return str(self.circq)
 
     def __repr__(self) -> str:
         ''' Returns a developer string representation of the CircularQueue object
@@ -345,5 +385,5 @@ class CircularQueue(IQueue[T]):
             Returns:
                 A string representation of the CircularQueue object
         '''
-        return f'ArrayQueue({repr(self.circularqueue)})'
+        return f'ArrayQueue({repr(self.circq)})'
                                   
