@@ -49,9 +49,17 @@ class ArrayStack(IStack[T]):
             Arguments:
                 item: T -- The item to push onto the stack.
         '''
-        if self._top < self.max_size-1:
-            self.stack.append(item)
-            self._top += 1
+
+        if self.max_size != 0 and self._top >= self.max_size:
+            raise IndexError('Stack is full')
+        
+        if self._top >= len(self.stack):
+          self.stack.append(item)
+
+        else:
+          self.stack[self._top] = item
+        self._top += 1
+
 
     def pop(self) -> T:
         ''' Pops an item from the stack.
@@ -77,9 +85,12 @@ class ArrayStack(IStack[T]):
             Returns:
                 T -- The item popped from the stack.
         '''
-        return self.stack(self._top)
-        self.stack.pop()
+        if self._top == 0:
+            raise IndexError('Stack is empty')
+        
         self._top -= 1
+        return self.stack[self._top]
+
 
     def clear(self) -> None:
        ''' Clears the stack. 
@@ -95,7 +106,8 @@ class ArrayStack(IStack[T]):
                >>> print(repr(s))
                ArrayStack(5): items: []
         '''
-       for i in range len(self.stack)
+        self.stack.clear()
+        self._top = 0
     
     @property
     def peek(self) -> T:
@@ -126,7 +138,9 @@ class ArrayStack(IStack[T]):
                 >>> s.peek
                 IndexError('Stack is empty')
         '''
-        raise NotImplementedError
+        if self._top == 0:
+            raise IndexError('Stack is empty')
+        return self.stack[self._top-1]
 
     @property
     def maxsize(self) -> int:
