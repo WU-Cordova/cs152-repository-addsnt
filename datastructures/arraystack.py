@@ -23,7 +23,11 @@ class ArrayStack(IStack[T]):
                 max_size: int -- The maximum size of the stack. 
                 data_type: type -- The data type of the stack.       
         '''
-        raise NotImplementedError('ArrayStack is not implemented')
+        self.max_size = max_size
+        self.data_type = data_type
+        self.stack = Array(data_type=data_type)
+        self._top = 0
+
 
     def push(self, item: T) -> None:
         ''' Pushes an item onto the stack.
@@ -45,7 +49,9 @@ class ArrayStack(IStack[T]):
             Arguments:
                 item: T -- The item to push onto the stack.
         '''
-        raise NotImplementedError
+        if self._top < self.max_size-1:
+            self.stack.append(item)
+            self._top += 1
 
     def pop(self) -> T:
         ''' Pops an item from the stack.
@@ -71,7 +77,9 @@ class ArrayStack(IStack[T]):
             Returns:
                 T -- The item popped from the stack.
         '''
-        raise NotImplementedError
+        return self.stack(self._top)
+        self.stack.pop()
+        self._top -= 1
 
     def clear(self) -> None:
        ''' Clears the stack. 
@@ -87,7 +95,7 @@ class ArrayStack(IStack[T]):
                >>> print(repr(s))
                ArrayStack(5): items: []
         '''
-       raise NotImplementedError
+       for i in range len(self.stack)
     
     @property
     def peek(self) -> T:

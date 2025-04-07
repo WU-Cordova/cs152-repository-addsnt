@@ -1,7 +1,5 @@
 import pytest
-
 from datastructures.arraystack import ArrayStack
-
 
 @pytest.fixture
 def stack() -> ArrayStack:
