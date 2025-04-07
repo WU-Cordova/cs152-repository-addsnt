@@ -70,13 +70,18 @@ class Array(IArray[T]):
 
     def append(self, data: T) -> None:
         if self.__capacity == self.__logical_size:
-            self.__capacity = self.__capacity*2
+
+            if self.__capacity == 0:
+                self.__capacity = 1
+            else:
+                self.__capacity = self.__capacity * 2
+
             new_elements = np.empty(self.__capacity, dtype=self.__data_type)
 
             for i in range(self.__logical_size):
                 new_elements[i] = self.__elements[i]
 
-        self.__elements = new_elements
+            self.__elements = new_elements
 
         self.__elements[self.__logical_size] = data
         self.__logical_size += 1
