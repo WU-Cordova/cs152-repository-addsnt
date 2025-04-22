@@ -104,7 +104,7 @@ class Deque[T](IQueue[T]):
         """
         if self.empty:
             raise IndexError("Deque is empty.")
-        return self._deque.tail
+        return self._deque.back
 
     def empty(self) -> bool:
         """
@@ -114,7 +114,7 @@ class Deque[T](IQueue[T]):
             - bool: True if the deque is empty, False otherwise.
         """
         return self._deque.empty
-        
+
     def __len__(self) -> int:
         """
         Returns the number of items in the deque.
