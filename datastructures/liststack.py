@@ -1,12 +1,12 @@
 import os
 from datastructures.istack import IStack
-from typing import Generic
+from typing import Generic, TypeVar
 
 from datastructures.linkedlist import LinkedList
 
-#T = TypeVar('T')
+T = TypeVar('T')
 
-class ListStack(Generic[T], IStack[T]):
+class ListStack[T](Generic[T], IStack[T]):
     """
     ListStack (LinkedList-based Stack)
 
