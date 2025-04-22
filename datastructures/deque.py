@@ -114,7 +114,7 @@ class Deque[T](IQueue[T]):
             - int: The number of items in the deque.
         """
         return len(self._deque)
-        
+
     def __contains__(self, item: T) -> bool:
         """
         Checks if an item exists in the deque.
@@ -125,7 +125,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the item exists in the deque, False otherwise.
         """
-        raise NotImplementedError("Method to check if an item exists in the deque is not implemented.")
+        return item in self._deque
     
     def __eq__(self, other) -> bool:
         """
@@ -143,7 +143,7 @@ class Deque[T](IQueue[T]):
         """
         Clears all items from the deque.
         """
-        raise NotImplementedError("Method to clear the deque is not implemented.")
+        self._deque.clear()
 
     def __str__(self) -> str:
         """
