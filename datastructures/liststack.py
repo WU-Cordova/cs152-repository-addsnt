@@ -6,7 +6,7 @@ from datastructures.linkedlist import LinkedList
 
 T = TypeVar('T')
 
-class ListStack[T](Generic[T], IStack[T]):
+class ListStack[T](IStack[T]):
     """
     ListStack (LinkedList-based Stack)
 
