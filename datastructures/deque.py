@@ -46,7 +46,7 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        if self.empty:
+        if len(self._deque) == 0:
             raise IndexError("Deque is empty")
 
         return self._deque.pop_front()
@@ -64,7 +64,6 @@ class Deque[T](IQueue[T]):
         if not isinstance(item, self.data_type):
             raise TypeError
         self._deque.prepend(item)
-        print(f"After enqueue_front({item}): {self._deque}")
 
     def dequeue_back(self) -> T:
         """
@@ -76,7 +75,7 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        if self.empty:
+        if len(self._deque) == 0:
             raise IndexError("Deque is empty.")
         self._deque.pop()
 
@@ -90,7 +89,7 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        if self.empty:
+        if len(self._deque) == 0:
             raise IndexError("Deque is empty.")
         return self._deque.front
 
@@ -104,7 +103,7 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        if self.empty:
+        if len(self._deque) == 0:
             raise IndexError("Deque is empty.")
         return self._deque.back
 
