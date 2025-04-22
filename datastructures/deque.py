@@ -34,6 +34,7 @@ class Deque[T](IQueue[T]):
             raise TypeError
         
         self._deque.append(item)
+        print(f"After enqueue({item}): {self._deque}")
 
     def dequeue(self) -> T:
         """
@@ -63,6 +64,7 @@ class Deque[T](IQueue[T]):
         if not isinstance(item, self.data_type):
             raise TypeError
         self._deque.prepend(item)
+        print(f"After enqueue_front({item}): {self._deque}")
 
     def dequeue_back(self) -> T:
         """
@@ -165,7 +167,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - str: A string representation of the deque.
         """
-        return str(slef._deque)
+        return str(self._deque)
     
     def __repr__(self) -> str:
         """
