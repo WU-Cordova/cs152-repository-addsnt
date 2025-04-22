@@ -4,7 +4,7 @@ from typing import Generic
 
 from datastructures.linkedlist import LinkedList
 
-T = TypeVar('T')
+#T = TypeVar('T')
 
 class ListStack(Generic[T], IStack[T]):
     """
