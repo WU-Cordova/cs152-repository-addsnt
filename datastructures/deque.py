@@ -48,6 +48,8 @@ class Deque[T](IQueue[T]):
         if self.empty:
             raise IndexError("Deque is empty")
 
+        return self._deque.pop_front()
+
     def enqueue_front(self, item: T) -> None:
         """
         Adds an item to the front of the deque.
@@ -72,7 +74,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to remove an item from the back of the deque is not implemented.")
+        if self.empty:
+            raise IndexError("Deque is empty.")
+        self._deque.pop()
 
     def front(self) -> T:
         """
@@ -84,7 +88,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to get the front item of the deque is not implemented.")
+        if self.empty:
+            raise IndexError("Deque is empty.")
+        return self._deque.front
 
     def back(self) -> T:
         """
@@ -96,7 +102,9 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to get the back item of the deque is not implemented.")
+        if self.empty:
+            raise IndexError("Deque is empty.")
+        return self._deque.tail
 
     def empty(self) -> bool:
         """
@@ -106,6 +114,7 @@ class Deque[T](IQueue[T]):
             - bool: True if the deque is empty, False otherwise.
         """
         return self._deque.empty
+        
     def __len__(self) -> int:
         """
         Returns the number of items in the deque.
