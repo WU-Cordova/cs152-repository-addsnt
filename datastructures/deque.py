@@ -137,7 +137,11 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the deques are equal, False otherwise.
         """
-        raise NotImplementedError("Method to compare two deques is not implemented.")
+        if not isinstance(other, Deque):
+            return False
+        else:
+            return self._deque == other._deque
+
     
     def clear(self):
         """
@@ -152,7 +156,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - str: A string representation of the deque.
         """
-        raise NotImplementedError("Method to get the string representation of the deque is not implemented.")
+        return str(slef._deque)
     
     def __repr__(self) -> str:
         """
@@ -161,8 +165,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - str: A detailed string representation of the deque.
         """
-        raise NotImplementedError("Method to get the detailed string representation of the deque is not implemented.")
-
+        return repr(self._deque)
 
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
