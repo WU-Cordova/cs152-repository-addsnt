@@ -14,7 +14,7 @@ class HashMap(IHashMap[KT, VT]):
             Array(starting_sequence=[LinkedList(data_type=tuple) for _ in range(number_of_buckets)], \
                 data_type=LinkedList)
         self._count: int = 0
-        self._load_factor_threshold: float = 0.75
+        self._load_factor_threshold: float = load_factor
         self._hash_function = custom_hash_function or self._default_hash_function
 
     def _get_bucket_number(self, key: KT) -> int:
@@ -22,22 +22,52 @@ class HashMap(IHashMap[KT, VT]):
 
 
     def __getitem__(self, key: KT) -> VT:
-        raise NotImplementedError("HashMap.__getitem__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_number(key)
+        bucket_chain: LinkedList[tuple] = self._buckets[bucket_index]
+        for k, v in bucket_chain:
+            if k == key:
+                return v
+        raise KeyError(key)
+
 
     def __setitem__(self, key: KT, value: VT) -> None:        
-        raise NotImplementedError("HashMap.__setitem__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_number(key)
+        bucket_chain: LinkedList[tuple] = self._buckets[bucket_index]
+        for i, (k, v) in enumerate(bucket_chain):
+            if k == key:
+                bucket_chain[i] = (key, value)
+                return
+
+        bucket_chain.append((key, value))
+        self._count += 1
+        if self._count / len(self._buckets) > self._load_factor_threshold:
+            self._resize(self.next_prime_after_double(len(self._buckets)))
 
     def keys(self) -> Iterator[KT]:
-        raise NotImplementedError("HashMap.ekys() is not implemented yet.")
+        for bucket in self._buckets:
+            for key, _ in bucket:
+                yield key
     
     def values(self) -> Iterator[VT]:
-        raise NotImplementedError("HashMap.values() is not implemented yet.")
+        for bucket in self._buckets:
+            for _, value in bucket:
+                yield value
 
     def items(self) -> Iterator[Tuple[KT, VT]]:
-        raise NotImplementedError("HashMap.items() is not implemented yet.")
+        for bucket in self._buckets:
+            for item in bucket:
+                yield item
             
     def __delitem__(self, key: KT) -> None:
-        raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
+        bucket_index: int = self._get_bucket_number(key)
+        bucket_chain: LinkedList[tuple] = self._buckets[bucket_index]
+        for i, (k, v) in enumerate(bucket_chain):
+            if k == key:
+                del bucket_chain[i]
+                self._count -= 1
+                return
+        raise KeyError(key)
+
     
     def __contains__(self, key: KT) -> bool:
         # 1. compute the bucket based on key
@@ -54,19 +84,56 @@ class HashMap(IHashMap[KT, VT]):
         return False
         
     def __len__(self) -> int:
-        raise NotImplementedError("HashMap.__len__() is not implemented yet.")
+        return self._count
     
     def __iter__(self) -> Iterator[KT]:
-        raise NotImplementedError("HashMap.__iter__() is not implemented yet.")
+        yield from self.keys()
     
     def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
+        if not isinstance(other, HashMap):
+            return False
+        if len(self) != len(other):
+            return False
+        for key, value in self.items():
+            if key not in other or other[key] != value:
+                return False
+        return True
+
 
     def __str__(self) -> str:
         return "{" + ", ".join(f"{key}: {value}" for key, value in self) + "}"
     
     def __repr__(self) -> str:
         return f"HashMap({str(self)})"
+
+    def resize(self, new_capacity: int) -> None:
+        old_buckets = self._buckets
+        self._buckets = Array(starting_sequence=[LinkedList(data_type=tuple) for _ in range(new_capacity)], data_type=LinkedList)
+        self._count = 0
+        for bucket in old_buckets:
+            for key, value in bucket:
+                self[key] = value
+
+
+    @staticmethod
+    def next_prime_after_double(n):
+
+        def is_prime(num: int) -> bool:
+            if num < 2:
+                return False
+            for i in range(2, int(num**0.5)+1): # sqrt of num = num**1/2
+                if num % i == 0:
+                    return False
+            return True
+
+        next_prime = n * 2
+
+        while not is_prime(next_prime):
+            next_prime += 1
+
+        return next_prime
+
+
 
     @staticmethod
     def _default_hash_function(key: KT) -> int:
