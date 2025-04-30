@@ -33,15 +33,19 @@ class HashMap(IHashMap[KT, VT]):
     def __setitem__(self, key: KT, value: VT) -> None:        
         bucket_index: int = self._get_bucket_number(key)
         bucket_chain: LinkedList[tuple] = self._buckets[bucket_index]
-        for i, (k, v) in enumerate(bucket_chain):
+        current = bucket_chain.head
+        while current:
+            k, v = current.data
             if k == key:
-                bucket_chain[i] = (key, value)
+                current.data = (key, value)
                 return
+            current = current.next
 
         bucket_chain.append((key, value))
         self._count += 1
         if self._count / len(self._buckets) > self._load_factor_threshold:
             self._resize(self.next_prime_after_double(len(self._buckets)))
+
 
     def keys(self) -> Iterator[KT]:
         for bucket in self._buckets:
@@ -61,12 +65,15 @@ class HashMap(IHashMap[KT, VT]):
     def __delitem__(self, key: KT) -> None:
         bucket_index: int = self._get_bucket_number(key)
         bucket_chain: LinkedList[tuple] = self._buckets[bucket_index]
-        for i, (k, v) in enumerate(bucket_chain):
+        found = False
+        for k, v in bucket_chain:
             if k == key:
-                del bucket_chain[i]
+                bucket_chain.remove((k, v))
                 self._count -= 1
-                return
-        raise KeyError(key)
+                found = True
+                break  # Assuming you only want to delete the first occurrence of the key
+        if not found:
+            raise KeyError(key)
 
     
     def __contains__(self, key: KT) -> bool:
@@ -106,7 +113,7 @@ class HashMap(IHashMap[KT, VT]):
     def __repr__(self) -> str:
         return f"HashMap({str(self)})"
 
-    def resize(self, new_capacity: int) -> None:
+    def _resize(self, new_capacity: int) -> None:
         old_buckets = self._buckets
         self._buckets = Array(starting_sequence=[LinkedList(data_type=tuple) for _ in range(new_capacity)], data_type=LinkedList)
         self._count = 0
