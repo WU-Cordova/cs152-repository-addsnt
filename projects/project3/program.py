@@ -1,10 +1,5 @@
-
-
-def main():
-    
-    print("Hello, World!")
-
-
+from projects.project3.bistro import BistroSystem
 
 if __name__ == '__main__':
-    main()
+    bistro_system = BistroSystem()
+    bistro_system.run()
