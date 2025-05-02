@@ -1,7 +1,7 @@
 import os
 from datastructures.iqueue import IQueue
 from datastructures.linkedlist import LinkedList
-from typing import TypeVar
+from typing import TypeVar, Iterator
 
 T = TypeVar('T')
 
@@ -115,6 +115,17 @@ class Deque[T](IQueue[T]):
             - bool: True if the deque is empty, False otherwise.
         """
         return self._deque.empty
+
+    def __iter__(self) -> Iterator[T]:
+        """
+        Returns an iterator for the deque, allowing iteration through its elements
+        from front to back.
+        """
+        current = self._deque.head
+        while current:
+            yield current.data
+            current = current.next
+
 
     def __len__(self) -> int:
         """

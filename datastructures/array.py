@@ -20,6 +20,31 @@ class Array(IArray[T]):
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
         if not isinstance(starting_sequence, Sequence):
+            raise ValueError("starting_sequence must be a sequence type.")
+
+        if not isinstance(data_type, type):
+            raise ValueError("data_type must be a type.")
+
+        self.__data_type = data_type
+        self.__logical_size = len(starting_sequence)
+        self.__capacity = self.__logical_size
+        self.__elements = np.empty(self.__capacity, dtype=object)  # Use object dtype initially
+
+        for index, item in enumerate(starting_sequence):
+            if item is not None and not isinstance(item, self.__data_type):
+                raise TypeError(f"Element at index {index} in starting_sequence ('{item}') does not match the specified data_type '{self.__data_type.__name__}'.")
+            self.__elements[index] = copy.deepcopy(item)
+
+        if self.__data_type != object:
+            # If a specific data_type is requested, try to cast the numpy array
+            try:
+                self.__elements = self.__elements.astype(self.__data_type)
+            except ValueError:
+                # This might happen if you have None and a strict numeric type
+                pass # We've already done the explicit type check, so we'll proceed
+
+
+        '''if not isinstance(starting_sequence, Sequence):
 	        raise ValueError("This should raise only raise if a strating_sequence is not a sequence type.")
 
         if not isinstance(data_type, type):
@@ -36,7 +61,7 @@ class Array(IArray[T]):
         self.__elements = np.empty(self.__capacity, dtype = data_type)
 
         for index in range(self.__logical_size):
-            self.__elements[index] = copy.deepcopy(starting_sequence[index])
+            self.__elements[index] = copy.deepcopy(starting_sequence[index])'''
 
     @overload
     def __getitem__(self, index: int) -> T: ...
@@ -61,7 +86,11 @@ class Array(IArray[T]):
             return self.__elements[index]
     
     def __setitem__(self, index: int, item: T) -> None:
-        if isinstance(item, self.__data_type):
+        '''if isinstance(item, self.__data_type):
+            self.__elements[index] = item
+        else:
+            raise TypeError(f"Item must be of type {self.__data_type.__name__}")'''
+        if item is None or isinstance(item, self.__data_type):
             self.__elements[index] = item
         else:
             raise TypeError(f"Item must be of type {self.__data_type.__name__}")

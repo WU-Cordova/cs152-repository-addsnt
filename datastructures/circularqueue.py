@@ -31,12 +31,20 @@ class CircularQueue(IQueue[T]):
                 maxsize: The maximum size of the queue
                 data_type: The type of the elements in the queue
         '''
-        self.max_size = maxsize
+        '''self.max_size = maxsize
         self.data_type = data_type
         self.circq = Array(starting_sequence=[0] * maxsize, data_type=data_type)
         self._front = 0
         self._rear = 0
+        self._size = 0'''
+
+        self.max_size = maxsize
+        self.data_type = data_type
+        self.circq = Array(starting_sequence=[None] * maxsize, data_type=data_type) # Changed [0] to [None]
+        self._front = 0
+        self._rear = 0
         self._size = 0
+
 
     def enqueue(self, item: T) -> None:
         ''' Adds an item to the rear of the queue
@@ -95,13 +103,22 @@ class CircularQueue(IQueue[T]):
             Raises:
                 IndexError: If the queue is empty
         '''
-        if self.empty:
+        '''if self.empty:
             raise IndexError('Queue is empty')
         item = self.circq[self._front]
         self.circq[self._front] = 0
         self._front = (self._front + 1) % self.max_size
         self._size -= 1
+        return item'''
+
+        if self.empty:
+            raise IndexError('Queue is empty')
+        item = self.circq[self._front]
+        self.circq[self._front] = None  # Change 0 to None
+        self._front = (self._front + 1) % self.max_size
+        self._size -= 1
         return item
+
 
 
     def clear(self) -> None:
